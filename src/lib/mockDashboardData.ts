@@ -39,5 +39,5 @@ export const chartData = [
 export const activityFeed = [
   { id: 1, message: "System Alert: Tech Summit starts in 2 hours", time: "2h ago" },
   { id: 2, message: "New ticket purchased for 'AI Conference'", time: "30m ago" },
-  { id: 3, message: "Event "Hackathon" registration opened", time: "Just now" },
+  { id: 3, message: 'Event "Hackathon" registration opened', time: "Just now" },
 ];
