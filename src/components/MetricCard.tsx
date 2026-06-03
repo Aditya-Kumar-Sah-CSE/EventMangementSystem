@@ -27,7 +27,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     <div className="relative rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-lg shadow-lg transition-all hover:scale-[1.02] hover:shadow-2xl">
       <div className="flex items-center justify-between mb-2">
         {icon && <div className="text-primary-foreground/70">{icon}</div>}
-        {TrendIcon && (
+        {trend !== undefined && TrendIcon && (
           <div className="flex items-center gap-1 text-sm">
             {TrendIcon}
             <span className="text-foreground/70">{trend > 0 ? `+${trend}%` : `${trend}%`}</span>
