@@ -1,9 +1,12 @@
 # EventMangementSystem
 
 ## Overview
-A **premium, Antigraviti‑styled** event‑management dashboard built with **Next.js 15 (App Router)**, **Tailwind CSS**, **Lucide React icons**, and **Recharts**. The UI features glass‑morphic cards, dark mode, micro‑animations, and a responsive layout.
+A **premium, Antigraviti‑styled** event‑management dashboard built with **Next.js 15 (App Router)**, **Tailwind CSS**, **Lucide React icons**, and **Recharts**.
 
-The backend is powered by **Prisma ORM** with a **MySQL** database and a **simple JWT‑based authentication** flow (register, login, protected routes).
+The current backend implementation uses:
+- **NextAuth (Credentials provider)** for authentication with a **JWT session strategy**.
+- **MongoDB (Mongoose)** as the primary persistence layer (when enabled).
+- A **mock/in‑memory user store** for signup in development (signup route has a `USE_MOCK_DB = true` switch).
 
 ![Dashboard screenshot](./screenshots/dashboard.png)
 
@@ -14,30 +17,25 @@ The backend is powered by **Prisma ORM** with a **MySQL** database and a **simpl
 - **Search palette** with filter tags.
 - **Quick‑action hub** for browsing, creating events, and viewing tickets.
 - **Activity sidebar** with upcoming dates and live alerts.
-- **RESTful API** (`/api/auth`, `/api/events`, `/api/tickets`).
-- **JWT auth** – stateless token stored in client side (e.g., `localStorage`).
-- **Prisma models** – `User`, `Event`, `Ticket`.
-- **MySQL** support – easily switch to any MySQL provider.
-- **Deployable to Vercel** (or any Node.js host) with environment variables.
+- **Next.js API routes** under `src/app/api/*`.
+- **Authentication** via **NextAuth Credentials + JWT strategy**.
+- **MongoDB collections/models** (e.g., `User`, `Event`, `Ticket`) when Mongo is enabled.
+
+> Note: Some API routes (e.g., events) may currently be skeletons/stubs depending on environment/config.
 
 ## Getting Started (Local Development)
-1. **Clone the repo** (once it’s pushed) and `cd` into the project.
-2. **Install dependencies**:
+1. **Install dependencies**:
    ```bash
    npm install
    ```
-3. **Set up environment variables** – copy the example file:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Edit `.env.local` and provide:
-   - `DATABASE_URL` – MySQL connection string (e.g., `mysql://user:pass@localhost:3306/eventdb`).
-   - `JWT_SECRET` – a strong random string.
-4. **Run Prisma migrations**:
-   ```bash
-   npx prisma migrate dev --name init
-   ```
-5. **Start the dev server**:
+
+2. **Set up environment variables**:
+   - Create `.env.local` based on your existing environment/example (if present).
+   - Required:
+     - `MONGODB_URI` – connection string for MongoDB (used by `src/lib/mongodb.ts`).
+     - `NEXTAUTH_SECRET` – used by NextAuth (`src/app/auth.ts`).
+
+3. **Start the dev server**:
    ```bash
    npm run dev   # http://localhost:3000
    ```
@@ -48,22 +46,32 @@ npm run build && npm start
 ```
 
 ## Deployment (Vercel)
-1. **Create a new Vercel project** linked to this GitHub repo.
-2. **Add the same environment variables** (`DATABASE_URL`, `JWT_SECRET`) in the Vercel dashboard.
-3. Vercel will automatically run `npm install`, `npx prisma generate`, and `npm run build`.
-4. After the build finishes, Vercel provides a live URL (e.g., `https://event-management-system.vercel.app`).
+1. Create a new Vercel project linked to this GitHub repo.
+2. Add required environment variables in Vercel:
+   - `MONGODB_URI`
+   - `NEXTAUTH_SECRET`
+3. Vercel will run `npm install` and build with `npm run build`.
 
-## API Endpoints
+## Auth & Users (Important)
+- Auth uses **NextAuth Credentials**.
+- Signup route currently defaults to **mock/in‑memory storage**:
+  - `src/app/api/auth/signup/route.ts` sets `const USE_MOCK_DB = true`.
+- To make signup use MongoDB, flip `USE_MOCK_DB` to `false` in that route.
+
+## API Endpoints (Current Routes)
+These routes live under the Next.js App Router and are implemented in `src/app/api/*`.
+
 | Method | Path | Description |
 |--------|------|-------------|
-| `POST` | `/api/auth/register` | Register a new user (email, password). |
-| `POST` | `/api/auth/login` | Login, returns JWT token. |
-| `GET`  | `/api/events` | List all events (public). |
-| `POST` | `/api/events` | Create event – requires JWT. |
-| `PUT`  | `/api/events/:id` | Update event – requires JWT. |
-| `DELETE`| `/api/events/:id` | Delete event – requires JWT. |
-| `GET`  | `/api/tickets` | List tickets for the authenticated user. |
-| `POST` | `/api/tickets` | Purchase tickets – requires JWT. |
+| `POST` | `/api/auth/signup` | Register a new user (email/password). (Mock-backed by default). |
+
+| (Auth via NextAuth) | `/api/auth/*` | NextAuth endpoints (login/session). |
+
+| `GET` | `/api/events` | Returns current events payload (may be stubbed depending on implementation). |
+| `POST` | `/api/events` | Create event (requires NextAuth session; persistence may be incomplete depending on route implementation). |
+
+> The previous README claimed CRUD endpoints for events/tickets, but the current codebase shows at least `src/app/api/events/route.ts` returning an initial/stub response.
+
 
 ## License
 MIT – feel free to fork, modify, and deploy.
