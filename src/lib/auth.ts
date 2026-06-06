@@ -1,10 +1,10 @@
-﻿import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { loginSchema } from "@/lib/validations/auth";
 import { mockUserStore } from "@/lib/mockUserStore";
 
-const USE_MOCK_DB = true;
+const USE_MOCK_DB = process.env.ENABLE_MOCK_DB === "true" || !process.env.MONGODB_URI;
 
 export const authOptions: NextAuthOptions = {
   providers: [

@@ -1,10 +1,10 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { registerSchema } from "@/lib/validations/auth";
 import { mockUserStore } from "@/lib/mockUserStore";
 
 // Use mock store for development
-const USE_MOCK_DB = true;
+const USE_MOCK_DB = process.env.ENABLE_MOCK_DB === "true" || !process.env.MONGODB_URI;
 
 export async function POST(req: Request) {
   try {

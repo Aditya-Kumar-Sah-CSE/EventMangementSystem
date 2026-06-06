@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import RegisterForm from "@/app/api/auth/signup/RegisterForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 
 export default function SignupPage() {
   return (

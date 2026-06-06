@@ -31,9 +31,10 @@ The current backend implementation uses:
 
 2. **Set up environment variables**:
    - Create `.env.local` based on your existing environment/example (if present).
-   - Required:
-     - `MONGODB_URI` – connection string for MongoDB (used by `src/lib/mongodb.ts`).
-     - `NEXTAUTH_SECRET` – used by NextAuth (`src/app/auth.ts`).
+Required:
+     - `MONGODB_URI` – connection string for MongoDB (used by `src/lib/mongodb.ts`). (Only needed if you set signup to `USE_MOCK_DB = false`.)
+     - `NEXTAUTH_SECRET` – **required** by NextAuth for stable auth/session handling (`src/app/auth.ts`).
+
 
 3. **Start the dev server**:
    ```bash

@@ -1,2 +1,2 @@
-export { registerSchema, loginSchema } from "@/app/validations";
+export { registerSchema, loginSchema } from "@/lib/validations";
 

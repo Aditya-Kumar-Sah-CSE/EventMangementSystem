@@ -1,9 +1,9 @@
 "use server";
-import { dbConnect } from "@/lib/db";
-import Registration from "@/lib/registration";
-import Event from "@/lib/Event";
+import dbConnect from "@/lib/mongodb";
+import Registration from "@/models/Registration";
+import Event from "@/models/Event";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/auth";
+import { authOptions } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function registerForEvent(eventId: string) {
